@@ -19,7 +19,7 @@ const MainLayout = ()=>{
 
         }else if(isAuthenticated == false){
             //redirect to signIn
-            router.replace('signin')
+            router.replace('signIn')
         }
     }, [isAuthenticated])
 
