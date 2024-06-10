@@ -1,5 +1,5 @@
 import {View, Text , ActivityIndicator} from 'react-native';
-import Reach from 'react';
+import React from 'react';
 
 export default function StartPage(){
     return(
