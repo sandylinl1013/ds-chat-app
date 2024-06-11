@@ -6,6 +6,7 @@ import { Octicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import Loading from '../components/Loading'
 import CostomKeyBordView from '../components/CostomKeyBordView';
+import { useAuth } from '../context/authContext';
 
 
 
@@ -13,6 +14,7 @@ export default function signIn() {
 
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const {login} = useAuth();
 
     const emailRef = useRef("");
     const passwordRef = useRef("");
@@ -22,8 +24,14 @@ export default function signIn() {
             Alert.alert('Sign In', "Please fill all the fields!");
             return;
         }
-
         //Login Process
+        setLoading(true);
+        const response = await login(emailRef.current, passwordRef.current);
+        setLoading(false);
+        console.log('Sign In Response: ', response)
+        if(!response.success){
+            Alert.alert('Sign In', response.msg);
+        }
 
     }
 
@@ -47,7 +55,7 @@ export default function signIn() {
                                 <TextInput
                                     onChangeText={value => emailRef.current = value}
                                     style={{ fontSize: hp(2.7) }}
-                                    className="flex-1 font-semibold text-bp-2"
+                                    className="flex-1 font-semibold text-bp-4"
                                     placeholder='Email address'
                                     placeholderTextColor={'#a3a0b9'}
                                 />
@@ -60,7 +68,7 @@ export default function signIn() {
                                     <TextInput
                                         onChangeText={value => passwordRef.current = value}
                                         style={{ fontSize: hp(2.7) }}
-                                        className="flex-1 font-semibold text-bp-2"
+                                        className="flex-1 font-semibold text-bp-4"
                                         placeholder='Password'
                                         secureTextEntry
                                         placeholderTextColor={'#a3a0b9'}
@@ -106,7 +114,7 @@ export default function signIn() {
                                         <Text style={{ fontSize: hp(2), color: pressed ? '#413776' : '#584e90' }} className="font-bold" >
                                             Sign Up!!
                                         </Text>
-                                    )} onPress={() => router.push('signUp')} />
+                                    )} onPress={() => router.push('signup')} />
                             </View>
                         </View>
 

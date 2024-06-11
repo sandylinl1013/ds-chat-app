@@ -6,23 +6,35 @@ import { Octicons, Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import Loading from '../components/Loading'
 import CostomKeyBordView from '../components/CostomKeyBordView';
+import { useAuth } from '../context/authContext';
 
 
 
 export default function signUp() {
 
   const router = useRouter();
+  const{register} = useAuth();
   const [loading, setLoading] = useState(false);
 
   const usernameRef = useRef("");
   const emailRef = useRef("");
   const passwordRef = useRef("");
-  const profilrRef = useRef("");
+  const profileRef = useRef("");
 
   const handleRegister = async () => {
-    if (!emailRef.current || !passwordRef.current || !usernameRef.current || !profilrRef.current) {
+    if (!emailRef.current || !passwordRef.current || !usernameRef.current || !profileRef.current) {
       Alert.alert('Sign In', "Please fill all the fields!");
       return;
+    }
+
+    setLoading(true);
+
+    let response = await register(emailRef.current, passwordRef.current, usernameRef.current, profileRef.current);
+    setLoading(false);
+
+    console.log('got result: ', response);
+    if(!response.success){
+      Alert.alert('Sign Up', response.msg);
     }
 
     //Login Process
@@ -51,7 +63,7 @@ export default function signUp() {
                 <TextInput
                   onChangeText={value => usernameRef.current = value}
                   style={{ fontSize: hp(2.7) }}
-                  className="flex-1 font-semibold text-bp-2"
+                  className="flex-1 font-semibold text-bp-4"
                   placeholder='User Name'
                   placeholderTextColor={'#a3a0b9'}
                 />
@@ -63,7 +75,7 @@ export default function signUp() {
                 <TextInput
                   onChangeText={value => emailRef.current = value}
                   style={{ fontSize: hp(2.7) }}
-                  className="flex-1 font-semibold text-bp-2"
+                  className="flex-1 font-semibold text-bp-4"
                   placeholder='Email address'
                   placeholderTextColor={'#a3a0b9'}
                 />
@@ -75,7 +87,7 @@ export default function signUp() {
                 <TextInput
                   onChangeText={value => passwordRef.current = value}
                   style={{ fontSize: hp(2.7) }}
-                  className="flex-1 font-semibold text-bp-2"
+                  className="flex-1 font-semibold text-bp-4"
                   placeholder='Password'
                   secureTextEntry
                   placeholderTextColor={'#a3a0b9'}
@@ -87,9 +99,9 @@ export default function signUp() {
                   <Feather name="image" size={wp(7)} color="#8177bb" />
                 </View>
                 <TextInput
-                  onChangeText={value => profilrRef.current = value}
+                  onChangeText={value => profileRef.current = value}
                   style={{ fontSize: hp(2.7) }}
-                  className="flex-1 font-semibold text-bp-2"
+                  className="flex-1 font-semibold text-bp-4"
                   placeholder='Profile url'
                   placeholderTextColor={'#a3a0b9'}
                 />
@@ -129,7 +141,7 @@ export default function signUp() {
                     <Text style={{ fontSize: hp(2), color: pressed ? '#413776' : '#584e90' }} className="font-bold" >
                       Sign In!!
                     </Text>
-                  )} onPress={() => router.push('signIn')} />
+                  )} onPress={() => router.push('signin')} />
               </View>
             </View>
           </View>
