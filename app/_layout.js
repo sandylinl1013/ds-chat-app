@@ -32,7 +32,6 @@ const MainLayout = () => {
 export default function RootLayout() {
     return (
         <UserContext>
-
             <React.Suspense fallback={<Text>Loading...</Text>}>
                 <SQLiteProvider databaseName="test.db" useSuspense={true}>
                     <MenuProvider>
@@ -42,7 +41,6 @@ export default function RootLayout() {
                     </MenuProvider>
                 </SQLiteProvider>
             </React.Suspense>
-
         </UserContext>
     );
 }

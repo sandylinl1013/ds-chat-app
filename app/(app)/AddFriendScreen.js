@@ -32,7 +32,7 @@ export default function AddFriend() {
             console.log("error message", err);
         }
     };
-
+    /*
     const fetchAllUsers = async () => {
         try {
             const response = await axios.get(`http://172.29.148.167:8000/users/${userId}`);
@@ -41,6 +41,19 @@ export default function AddFriend() {
             }
         } catch (err) {
             console.log("error fetching all users", err);
+        }
+    };*/
+    const fetchAllUsers = async () => {
+        try {
+            console.log("userId = ", userId);
+            const response = await axios.get(`http://172.29.148.167:8000/users/${userId}`);
+            if (response.status === 200 && Array.isArray(response.data)) {
+                setAllUsers(response.data);
+            } else {
+                console.error('Invalid user data received');
+            }
+        } catch (err) {
+            console.log('Error fetching all users', err);
         }
     };
 

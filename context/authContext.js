@@ -1,51 +1,103 @@
-import { createContext, useEffect, useState, useContext} from "react";
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { createContext, useEffect, useState, useContext } from "react";
+import { auth, db } from "../firebaseConfig"
+import { UserType } from './UserContext';
 
 export const AuthContext = createContext();
 
-export const AuthContextProvider = ({children})=>{
+export const AuthContextProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(undefined)
-
-    useEffect(() =>{
+    const { setUserId } = useContext(UserType);
+    /*
+    useEffect(() => {
         //on AuthStateChange
         //setTimeout(()=>{
-            setIsAuthenticated(false)
+        setIsAuthenticated(false)
         //},3000);
-    })
+    })*/
+    
+    useEffect(() => {
+        const unsub = onAuthStateChanged(auth, (user) => {
+            //console.log('got user: ', user);
+            if (user) {
+                setIsAuthenticated(true);
+                setUser(user);
+                setUserId(user.uid)
+                updateUserData(user.uid);
+            } else {
+                setIsAuthenticated(false);
+                setUser(null);
+                setUserId("");
+            }
+        });
+        return unsub;
+    }, [])
 
-    const login = async (email, password)=>{
-        try{
+    const updateUserData = async (userId) => {
+        const docRef = doc(db, 'users', userId);
+        const docSnap = await getDoc(docRef);
 
-        }catch(e){
-
+        if(docSnap.exists()){
+            let data = docSnap.data();
+            setUser({...user, username: data.username, profileURL: data.profileURL, userId: data.uid});
         }
     }
-    const logout = async ()=>{
-        try{
 
-        }catch(e){
-            
+    const login = async (email, password) => {
+        try {
+            const response = await signInWithEmailAndPassword(auth, email, password);
+            return { success: true };
+        } catch (e) {
+            let msg = e.message;
+            if (msg.includes('(auth/invalid-email)')) msg = 'Invalid Email';
+            if (msg.includes('(auth/invalid-credential)')) msg = 'This email is not registed.';
+
+            return { success: false, msg };
         }
     }
-    const register = async (email, password, username, )=>{
-        try{
 
-        }catch(e){
-            
+    const logout = async () => {
+        try {
+            await signOut(auth);
+            return { success: true };
+        } catch (e) {
+            return { success: false, msg: e.message, error: e };
         }
     }
 
-    return(
-        <AuthContext.Provider value={{user, isAuthenticated, login, register, logout}}>
+    const register = async (email, password, username, profileURL) => {
+        try {
+            const response = await createUserWithEmailAndPassword(auth, email, password);
+            //console.log('response.user : ', response?.user);
+
+            await setDoc(doc(db, "users", response?.user?.uid), {
+                username,
+                profileURL,
+                uid: response?.user?.uid
+            });
+            return { success: true, data: response?.user };
+
+        } catch (e) {
+            let msg = e.message;
+            if (msg.includes('(auth/invalid-email)')) msg = 'Invalid Email';
+            if (msg.includes('(auth/email-already-in-use)')) msg = 'This email is already in use.'
+
+            return { success: false, msg };
+        }
+    }
+    return (
+        <AuthContext.Provider value={{ user, isAuthenticated, login, register, logout }}>
             {children}
         </AuthContext.Provider>
     )
 }
 
-export const useAuth = ()=>{
+export const useAuth = () => {
     const value = useContext(AuthContext);
 
-    if(!value){
+    if (!value) {
         throw new Error('useAuth must be wrapped inside AuthContextProvider');
     }
     return value;

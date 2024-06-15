@@ -11,26 +11,29 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwt_decode from "jwt-decode";
 //import User from "../../components/User";
 import UserChat from "../../components/UserChat";
+//import {getDatabaseConnection, createTables} from "../../components/database";
 
 export default function Home() {
   const { logout, user } = useAuth();
+  const handleLogout = async () => {
+    await logout();
+  }
+  
   const [loading, setLoading] = useState(true);
-
-  const { userId, setUserId } = useContext(UserType);
+  //const { userId, setUserId } = useContext(UserType);
   const [acceptedFriends, setAcceptedFriends] = useState([]);
+
+  const { userId } = useContext(UserType);
+
   useEffect(() => {
     const acceptedFriendsList = async () => {
       try {
-        const token = await AsyncStorage.getItem("authToken");
-        const decodedToken = jwt_decode(token);
-        const userId = decodedToken.userId;
         console.log(userId)
-        setUserId(userId);
         const response = await fetch(
-          `http://172.29.148.167:8000/accepted-friends/${userId}`
+          //`http://172.29.148.167:8000/accepted-friends/${userId}`
+          `http://172.29.148.167:8000/chatrooms/${userId}`
         );
         const data = await response.json();
-
         if (response.ok) {
           setAcceptedFriends(data);
         }
@@ -38,18 +41,21 @@ export default function Home() {
         console.log("error showing the accepted friends", error);
       }
     };
-
     acceptedFriendsList();
-  }, []);
 
+  }, [user]);
   return (
     <View className="flex-1 bg-white">
+      <Text>Home</Text>
+      <Pressable onPress={handleLogout}>
+        <Text>Log Out</Text>
+      </Pressable>
       <ScrollView showsVerticalScrollIndicator={false}>
         <StatusBar style="light" />
         {acceptedFriends.length > 0 ? (
           <View>
             {acceptedFriends.map((item, index) => (
-              <Pressable key={index} onPress={() => { /* Handle press */ }}>
+              <Pressable key={index} onPress={() => { }}>
                 {index === acceptedFriends.length - 1 ? (
                   <UserChat item={item} noBorder={true} />
                 ) : (
@@ -60,13 +66,10 @@ export default function Home() {
           </View>
         ) : (
           <View style={styles.noFriendsContainer}>
-            {/*
-            <View className="flex items-center" style={{ top: '30%' }}>
-            <ActivityIndicator size="large" />*/}
+
             <Text style={styles.noFriendsText}>No friends yet. Please add friends.</Text>
           </View>
         )}
-
       </ScrollView>
     </View>
   );

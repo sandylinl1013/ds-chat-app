@@ -26,6 +26,9 @@ export default function HomeHeader() {
     const handleProfile = () => {
         navigation.navigate("profile")
     }
+    const handleCreateGroup = () => {
+        navigation.navigate("CreateGroup")
+    }
     const handleLogout = async () => {
         //await logout();
         router.replace('signin')
@@ -88,6 +91,13 @@ export default function HomeHeader() {
                             action={handleAddFriend}
                             value={null}
                             icon={<MaterialIcons name="people-outline" size={hp(2.5)} color="#737373" />}
+                        />
+                        <Devider />
+                        <MenuItem
+                            text="CreateGroup"
+                            action={handleCreateGroup}
+                            value={null}
+                            icon={<Feather name="user" size={hp(2.5)} color="#737373" />}
                         />
                     </MenuOptions>
                 </Menu>
