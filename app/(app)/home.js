@@ -1,4 +1,4 @@
-import {View, Text, Pressable } from 'react-native';
+import {View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import React from 'react';
 import { useAuth } from '../../context/authContext';
 
@@ -8,15 +8,24 @@ export default function Home(){
     const handleLogout = async ()=>{
         await logout();
     }
-    console.log('user data: ', user);
-    return(
-        <View>
-            <Text>Home</Text>
-            <Pressable onPress={handleLogout}>
-                <Text>
-                    Sign Out
-                </Text>
-            </Pressable>
+    return (
+        <View className="flex-1 bg-white">
         </View>
-    )
-}
+      );
+    
+    };
+    
+    const styles = StyleSheet.create({
+      noFriendsContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+      },
+      noFriendsText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#8177bb',
+        textAlign: 'center',
+      },
+    });
