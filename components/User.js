@@ -25,6 +25,7 @@ const User = ({ item, userFriends }) => {
 
   const sendFriendRequest = async (currentUserId, selectedUserId) => {
     try {
+      console.log(currentUserId, selectedUserId);
       const response = await axios.post("http://172.29.148.167:8000/friend-request", {
         currentUserId,
         selectedUserId
@@ -55,7 +56,7 @@ const User = ({ item, userFriends }) => {
         <Text style={{ fontWeight: "bold" }}>{item?.name}</Text>
         <Text style={{ marginTop: 4, color: "gray" }}>{item?.email}</Text>
       </View>
-      {userFriends && userFriends.includes(item._id) ? (
+      {userFriends && userFriends.includes(item.uid) ? (
         <Pressable
           style={{
             backgroundColor: "#82CD47",
@@ -66,7 +67,7 @@ const User = ({ item, userFriends }) => {
         >
           <Text style={{ textAlign: "center", color: "white" }}>Friends</Text>
         </Pressable>
-      ) : requestSent || friendRequests.some(friend => friend._id === item._id) ? (
+      ) : requestSent || friendRequests.some(friend => friend.uid === item.uid) ? (
         <Pressable
           style={{
             backgroundColor: "gray",
@@ -79,7 +80,7 @@ const User = ({ item, userFriends }) => {
         </Pressable>
       ) : (
         <Pressable
-          onPress={() => sendFriendRequest(userId, item._id)}
+          onPress={() => sendFriendRequest(userId, item.uid)}
           style={{
             backgroundColor: "#567189",
             padding: 10,

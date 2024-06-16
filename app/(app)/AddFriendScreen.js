@@ -15,16 +15,26 @@ export default function AddFriend() {
     const [friendRequests, setFriendRequests] = useState([]);
     const [allUsers, setAllUsers] = useState([]);
     const [userFriends, setUserFriends] = useState([]);
-
+    useEffect(() => {
+        if (userId) {
+            console.log("Fetching data with userId: ", userId);
+            fetchFriendRequests();
+            fetchAllUsers();
+            fetchUserFriends();
+        }
+    }, [userId]);
+    /*
     useEffect(() => {
         fetchFriendRequests();
         fetchAllUsers();
         fetchUserFriends();
-    }, []);
+    }, []);*/
 
     const fetchFriendRequests = async () => {
         try {
+            console.log(userId)
             const response = await axios.get(`http://172.29.148.167:8000/friend-request/${userId}`);
+            console.log(response.data)
             if (response.status === 200) {
                 setFriendRequests(response.data);
             }
@@ -32,17 +42,6 @@ export default function AddFriend() {
             console.log("error message", err);
         }
     };
-    /*
-    const fetchAllUsers = async () => {
-        try {
-            const response = await axios.get(`http://172.29.148.167:8000/users/${userId}`);
-            if (response.status === 200) {
-                setAllUsers(response.data);
-            }
-        } catch (err) {
-            console.log("error fetching all users", err);
-        }
-    };*/
     const fetchAllUsers = async () => {
         try {
             console.log("userId = ", userId);
@@ -59,6 +58,7 @@ export default function AddFriend() {
 
     const fetchUserFriends = async () => {
         try {
+            console.log("fetchUserFriends = ", userId)
             const response = await axios.get(`http://172.29.148.167:8000/friends/${userId}`);
             if (response.status === 200) {
                 setUserFriends(response.data);

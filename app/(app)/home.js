@@ -28,12 +28,13 @@ export default function Home() {
   useEffect(() => {
     const acceptedFriendsList = async () => {
       try {
-        console.log(userId)
+        console.log("chatroom uid = ",userId)
         const response = await fetch(
           //`http://172.29.148.167:8000/accepted-friends/${userId}`
           `http://172.29.148.167:8000/chatrooms/${userId}`
         );
         const data = await response.json();
+        console.log(data)
         if (response.ok) {
           setAcceptedFriends(data);
         }
@@ -46,10 +47,10 @@ export default function Home() {
   }, [user]);
   return (
     <View className="flex-1 bg-white">
-      <Text>Home</Text>
+      {/*<Text>Home</Text>
       <Pressable onPress={handleLogout}>
         <Text>Log Out</Text>
-      </Pressable>
+      </Pressable>*/}
       <ScrollView showsVerticalScrollIndicator={false}>
         <StatusBar style="light" />
         {acceptedFriends.length > 0 ? (

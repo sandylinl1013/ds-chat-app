@@ -19,13 +19,14 @@ export const AuthContextProvider = ({ children }) => {
     })*/
     
     useEffect(() => {
-        const unsub = onAuthStateChanged(auth, (user) => {
+        const unsub = onAuthStateChanged(auth, async (user) => {
             //console.log('got user: ', user);
             if (user) {
+                console.log("User authenticated: ", user.uid);
                 setIsAuthenticated(true);
                 setUser(user);
                 setUserId(user.uid)
-                updateUserData(user.uid);
+                await updateUserData(user.uid);
             } else {
                 setIsAuthenticated(false);
                 setUser(null);
@@ -41,7 +42,7 @@ export const AuthContextProvider = ({ children }) => {
 
         if(docSnap.exists()){
             let data = docSnap.data();
-            setUser({...user, username: data.username, profileURL: data.profileURL, userId: data.uid});
+            setUser((user) => ({...user, username: data.username, profileURL: data.profileURL, userId: data.uid}));
         }
     }
 
