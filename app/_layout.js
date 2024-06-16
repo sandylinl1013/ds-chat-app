@@ -44,13 +44,3 @@ export default function RootLayout() {
         </UserContext>
     );
 }
-/*
-export default function RootLayout(){
-  return(
-      <MenuProvider>
-          <AuthContextProvider>
-              <MainLayout />
-          </AuthContextProvider>
-      </MenuProvider>
-  )
-}*/

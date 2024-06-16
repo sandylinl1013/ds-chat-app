@@ -10,13 +10,6 @@ export const AuthContextProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(undefined)
     const { setUserId } = useContext(UserType);
-    /*
-    useEffect(() => {
-        //on AuthStateChange
-        //setTimeout(()=>{
-        setIsAuthenticated(false)
-        //},3000);
-    })*/
     
     useEffect(() => {
         const unsub = onAuthStateChanged(auth, async (user) => {

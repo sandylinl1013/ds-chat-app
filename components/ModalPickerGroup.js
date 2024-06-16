@@ -3,26 +3,23 @@ import React from 'react';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const OPTIONS = [
-  require('../assets/images/photo-stickers/1.png'),
-  require('../assets/images/photo-stickers/2.png'),
-  require('../assets/images/photo-stickers/3.png'),
-  require('../assets/images/photo-stickers/4.png'),
-  require('../assets/images/photo-stickers/5.png'),
-  require('../assets/images/photo-stickers/6.png'),
-  require('../assets/images/photo-stickers/7.png'),
-  require('../assets/images/photo-stickers/8.png'),
-  require('../assets/images/photo-stickers/9.png'),
-  require('../assets/images/photo-stickers/10.png'),
-  require('../assets/images/photo-stickers/11.png'),
-  require('../assets/images/photo-stickers/12.png')
+  require('../assets/images/GroupImage/1.png'),
+  require('../assets/images/GroupImage/2.png'),
+  require('../assets/images/GroupImage/3.png'),
+  require('../assets/images/GroupImage/4.png'),
+  require('../assets/images/GroupImage/5.png'),
+  require('../assets/images/GroupImage/6.png'),
+  require('../assets/images/GroupImage/7.png'),
+  require('../assets/images/GroupImage/8.png'),
+  require('../assets/images/GroupImage/9.png'),
+  require('../assets/images/GroupImage/10.png')
 ];
 
-const ModalPicker = (props) => {
+const ModalPickerGroup = (props) => {
 
   const onPressItem = (option, index) => {
     console.log("Selected option: ", option, "at index: ", index);
-    // 您可以在這裡回傳圖片的位置，例如調用父組件的函數
-    props.onSelect(option, index);
+    props.onSelect( option, index);
     props.ChangeModalVis(false);
   };
 
@@ -87,4 +84,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { ModalPicker };
+export { ModalPickerGroup };

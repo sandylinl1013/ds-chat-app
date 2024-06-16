@@ -23,15 +23,11 @@ export default function signUp() {
   const [imagePlaceHolder, setImagePlace] = useState(require('../assets/images/photo-stickers/1.png'))
 
   const handleSelect = (option, index) => {
-    // 更新 imagePlaceHolder 為新的圖片路徑
     profileRef.current = index + 1;
     setImagePlace(option);
-    console.log('Profile Index: ', profileRef.current);
+    //console.log('Profile Index: ', profileRef.current);
   };
-  const [isModalVis, setModalVis] = useState(false);
-  const ChangeModalVis = (bool) => {
-    setModalVis(bool)
-  }
+
   // register user on db
   const registerUser = async (uid, email, name, profileURL) => {
     try {
@@ -77,6 +73,11 @@ export default function signUp() {
     }
     //Login Process
 
+  }
+
+  const [isModalVis, setModalVis] = useState(false);
+  const ChangeModalVis = (bool) => {
+    setModalVis(bool)
   }
 
   return (
